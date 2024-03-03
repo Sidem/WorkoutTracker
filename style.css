@@ -1,0 +1,231 @@
+
+/* CSS Variables */
+:root {
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --background-color: #f5f5f5;
+    --font-size-large: 4rem;
+    --font-size-normal: 1rem;
+    --padding-small: 8px;
+    --margin-small: 8px;
+    --button-bg-color: #007bff; /* Example button background color */
+    --button-text-color: #ffffff; /* Example button text color */
+}
+
+/* Base Styles */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--background-color);
+    font-size: var(--font-size-large);
+}
+
+#exercises,
+#workouts {
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.item-adjust-button-container {
+    width: 20%;
+}
+
+.item-adjust-button {
+    line-height: var(--font-size-large);
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    padding: 0;
+    width: 50%;
+    background-color: #007bff;
+    width: 50%;
+}
+
+#workout {
+    position: relative;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 140px 15px;
+    margin: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.exercise {
+    position: relative;
+    margin-bottom: 0.5rem;
+    background-color: rgb(209, 209, 209);
+}
+
+.exercise.selected {
+    background-color: #ca6302;
+}
+.exercise-name {
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    margin-right: 5rem;
+}
+
+/*BUTTONS*/
+.button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-weight: bold;
+    font-size: 3rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.workoutButton {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    margin: 10px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.deleteButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0.7;
+}
+.addButton {
+    background-color: #28a745;
+}
+
+.record {
+    border: 1px solid #000;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 3rem;
+}
+.record-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    padding: 5px 0;
+}
+.record-title {
+    font-weight: bold;
+}
+.record-notes {
+    font-style: italic;
+    grid-column: 2 / 4; /* Make record-notes span two columns */
+}
+.exercise-record {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 5px 0;
+}
+.exercise-record:nth-child(even) {
+    background-color: #f0f0f0; /* Slightly different background color for every second record */
+}
+
+.exercise-weight-record, .exercise-reps-record {
+    text-align: right;
+    font-family: monospace; /* Makes the font monospace */
+}
+
+/* Select dropdown box with the same style and size */
+.reuse-weights-selection {
+    font-size: var(--font-size-large);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #007bff;
+    margin: 10px 0;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+span#workoutTitle {
+    display: block;
+    position: absolute;
+    top:0;
+    left: 0;
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 15px 0px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+}
+
+.disabled {
+    color: grey;
+    cursor: no-drop;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.total-weight-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.collapsed {
+    height: 0rem;
+    overflow: hidden;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 5px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: var(--font-size-large);
+    color: #333;
+    user-select: none;
+    margin: 0 5px;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
+.item-weight {
+    color: #555;
+}
+
+.item-quantity {
+    color: #777;
+    font-style: italic;
+}
+
+.item:hover {
+    background-color: #eef;
+    border-color: #ccd;
+}
