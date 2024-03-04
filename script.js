@@ -23,7 +23,7 @@ let usedWeights = {};
 let availableWorkoutWeights = {};
 let workoutExercises = {};
 let selectedExercise = '';
-let weightsCollapsed = false;
+let weightsCollapsed = true;
 let weightAdjustDisabled = true;
 let currentReuse = 'none';
 
@@ -187,15 +187,28 @@ function addCollapseHeader(container, collapseTarget, title) {
 function createWeightItem(weight) {
     const itemContainer = document.createElement('div');
     itemContainer.classList.add('item');
+    const weightIcon = document.createElement('img');
+    weightIcon.src = `./icons/${weight.name.toLowerCase()}.png`;
+    weightIcon.classList.add('item-icon');
+    itemContainer.appendChild(weightIcon);
 
     const itemName = document.createElement('span');
-    itemName.textContent = `${weight.name} ${weight.weight}kg`;
+    itemName.textContent = `${weight.weight.toFixed(2)}kg`; //${weight.name} 
     itemName.classList.add('item-name');
 
-    const itemQuantity = document.createElement('span');
+    const itemQuantity = document.createElement('div');
     const usedInThisExercise = selectedExercise && workouts[selectedWorkout].exercises[selectedExercise].weights[weight.id] ? workouts[selectedWorkout].exercises[selectedExercise].weights[weight.id].quantity : 0;
     const remainingAfterThisExercise = weight.available - (weight.used - usedInThisExercise);
-    itemQuantity.textContent = selectedExercise ? `(${usedInThisExercise}/${remainingAfterThisExercise})` : `(${weight.used}/${weight.available})`;
+    //itemQuantity.textContent = selectedExercise ? `${usedInThisExercise}/${remainingAfterThisExercise}` : `${weight.used}/${weight.available}`;
+    const usedItems = selectedExercise ? usedInThisExercise : weight.used;
+    const availableItems = selectedExercise ? remainingAfterThisExercise : weight.available;
+    for(let i = 0; i < availableItems; i++) {
+        const itemBar = document.createElement('div');
+        itemBar.classList.add('item-quantity-bar');
+        if(i < usedItems) itemBar.classList.add('item-quantity-bar-filled');
+        itemBar.style.width = `${100/availableItems}%`;
+        itemQuantity.appendChild(itemBar);
+    }
     itemQuantity.classList.add('item-quantity');
 
     itemContainer.appendChild(itemName);
@@ -225,10 +238,7 @@ function toggleWeightAdjust() {
     weights.forEach(weight => weight.disabled = weightAdjustDisabled);
 }
 
-//add a dropdown to select exercise whose weights to reuse
 function addReuseWeightsSelection(container) {
-
-    //if already exists remove it
     const existingReuseWeightsSelection = document.querySelector('.reuse-weights-selection');
     if (existingReuseWeightsSelection) {
         existingReuseWeightsSelection.remove();
@@ -236,7 +246,13 @@ function addReuseWeightsSelection(container) {
 
     const reuseWeightsSelection = document.createElement('select');
     reuseWeightsSelection.classList.add('reuse-weights-selection');
-    //add "reuses" property to exercise object value is the exercise whose weights to reuse
+
+    //add label for reuse weights selection
+    const reuseWeightsLabel = document.createElement('label');
+    reuseWeightsLabel.textContent = 'Reuse:';
+    reuseWeightsLabel.classList.add('reuse-weights-label');
+    container.appendChild(reuseWeightsLabel);
+
     reuseWeightsSelection.onchange = (e) => {
         workouts[selectedWorkout].exercises[selectedExercise].reuses = e.target.value;
         localStorage.setItem('workouts', JSON.stringify(workouts));
@@ -261,7 +277,7 @@ function addReuseWeightsSelection(container) {
         }
         reuseWeightsSelection.appendChild(option);
     }
-    //set value to the exercise whose weights are being reused
+    
     reuseWeightsSelection.value = workouts[selectedWorkout].exercises[selectedExercise].reuses || 'none';
     container.appendChild(reuseWeightsSelection);
 }
@@ -287,7 +303,12 @@ function addTotalWeightForExercise(container) {
     totalWeightContainer.classList.add('total-weight-container');
     const totalWeight = document.createElement('span');
     totalWeight.classList.add('total-weight');
-    totalWeight.textContent = selectedExercise ? `${calculateTotalWeight(workouts[selectedWorkout].exercises[selectedExercise].weights)}kg (${convertKgToLbs(calculateTotalWeight(workouts[selectedWorkout].exercises[selectedExercise].weights))}lbs)` : '';
+    if (currentReuse !== 'none') {
+        totalWeight.textContent = `${calculateTotalWeight(workouts[selectedWorkout].exercises[currentReuse].weights)}kg (${convertKgToLbs(calculateTotalWeight(workouts[selectedWorkout].exercises[currentReuse].weights))}lbs)`;
+    } else {
+        totalWeight.textContent = selectedExercise ? `${calculateTotalWeight(workouts[selectedWorkout].exercises[selectedExercise].weights)}kg (${convertKgToLbs(calculateTotalWeight(workouts[selectedWorkout].exercises[selectedExercise].weights))}lbs)` : '';
+    }
+    if(selectedExercise == '') totalWeight.textContent = 'Select exercise to see weight.';
     totalWeightContainer.appendChild(totalWeight);
     container.appendChild(totalWeightContainer);
 }
@@ -346,9 +367,9 @@ function selectExercise(exercise) {
     }
     displayWeights();
 }
-function addExercise() {
-    let exerciseName = prompt('Enter Exercise Name');
-    if(exerciseName === null) return;
+async function addExercise() {
+    let exerciseName = await customPrompt('Enter Exercise Name', '');
+    if(exerciseName === null || exerciseName == '') return;
     let exerciseId = exerciseName.toLowerCase().replace(/ /g, '');
     let newExercise = {
         name: exerciseName,
@@ -370,9 +391,9 @@ function deleteExercise(exerciseId, exercise) {
         return;
     }
 }
-function addWorkout() {
-    let workoutName = prompt('Enter the name of the workout');
-    if(workoutName === null) return;
+async function addWorkout() {
+    let workoutName = await customPrompt('Enter the name of the workout', '');
+    if(workoutName === null || workoutName == '') return;
     let newWorkout = {
         name: workoutName,
         exercises: {}
@@ -394,7 +415,7 @@ function deleteWorkout() {
         return;
     }
 }
-function addRecord() {
+async function addRecord() {
     let records = JSON.parse(localStorage.getItem('records')) || [];
     let workout = workouts[selectedWorkout];
     let workoutName = workout.name;
@@ -410,18 +431,61 @@ function addRecord() {
         exerciseRecords[exerciseName] = {
             weights: workout.exercises[exercise].weights,
             totalWeight: exerciseWeight,
-            reps: prompt('How many reps did you manage for ' + exerciseName + '? (default 8)') || 8,
+            reps: await customPrompt(exerciseName + ' reps?', 8, 'number'),
         };
     }
     let recordEntry = {
         name: workoutName,
         date: new Date().toLocaleDateString('de-DE'),
         exerciseRecords: exerciseRecords,
-        notes: prompt('Add any notes about the workout') || ''
+        notes: await customPrompt('Add any notes about the workout', '')
     };
     records.push(recordEntry);
     localStorage.setItem('records', JSON.stringify(records));
     displayRecords();
+}
+
+function customPrompt(message, defaultValue = '', inputType = 'text') {
+    return new Promise((resolve) => {
+        // Create and show the modal
+        let inputId = 'customTextInput';
+        switch(inputType) {
+            case 'number':
+                inputId = 'customNumberInput';
+                break;
+            default:
+                inputType = 'text';
+        }
+        const promptModal = document.createElement('div');
+        promptModal.innerHTML = `
+            <div style="font-size: 2rem; position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; padding: 10px;">
+                <div style="background-color: white; padding: 20px; border-radius: 5px; width: 100%; max-width: 400px;">
+                    <form id="customPromptForm">
+                        <label for="${inputId}" style="display:block; margin-bottom: 10px;">${message}</label>
+                        <input type="${inputType}" id="${inputId}" class="customInput" placeholder="${defaultValue}" style="width: 100%; padding: 10px; margin-bottom: 10px;" />
+                        <button type="submit" style="width: 100%; padding: 10px; border: none; background-color: #007bff; color: white; border-radius: 5px;">OK</button>
+                        <button type="button" id="cancelBtn" style="width: 100%; padding: 10px; border: none; background-color: #ccc; color: white; border-radius: 5px; margin-top: 5px;">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(promptModal);
+
+        const form = document.getElementById('customPromptForm');
+        const numberInput = document.getElementById(inputId);
+        numberInput.focus();
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting in the traditional way
+            resolve(numberInput.value || defaultValue); // Resolve with default value if input is empty
+            document.body.removeChild(promptModal);
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            resolve(null);
+            document.body.removeChild(promptModal);
+        });
+    });
 }
 
 function displayRecord(record, recordsContainer) {

@@ -1,17 +1,16 @@
-
-/* CSS Variables */
 :root {
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --background-color: #f5f5f5;
-    --font-size-large: 4rem;
+    --line-height: 4.5rem;
+    --font-size-large: 3rem;
+    --font-size-medium: 2rem;
     --font-size-normal: 1rem;
-    --padding-small: 8px;
-    --margin-small: 8px;
-    --button-bg-color: #007bff; /* Example button background color */
-    --button-text-color: #ffffff; /* Example button text color */
+    --padding-small: 0.5rem;
+    --margin-small: 0.5rem;
+    --button-bg-color: #007bff;
+    --button-text-color: #ffffff;
 }
 
-/* Base Styles */
 body {
     font-family: var(--font-family);
     margin: 0;
@@ -23,6 +22,11 @@ body {
     font-size: var(--font-size-large);
 }
 
+#exercises, 
+#weightsContainer {
+    margin: 1rem 0;
+}
+
 #exercises,
 #workouts {
     display: flex;
@@ -32,31 +36,15 @@ body {
     width: 100%;
 }
 
-.item-adjust-button-container {
-    width: 20%;
-}
-
-.item-adjust-button {
-    line-height: var(--font-size-large);
-    font-size: var(--font-size-large);
-    font-weight: bold;
-    padding: 0;
-    width: 50%;
-    background-color: #007bff;
-    width: 50%;
-}
-
 #workout {
     position: relative;
-    border: 2px solid #007bff;
-    border-radius: 8px;
-    padding: 140px 15px;
-    margin: 10px;
+    border: 2px solid var(--button-bg-color);
+    border-radius: var(--padding-small);
+    padding: var(--line-height) var(--padding-small) var(--padding-small) var(--padding-small);
+    margin: var(--margin-small);
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .exercise {
     position: relative;
@@ -67,98 +55,111 @@ body {
 .exercise.selected {
     background-color: #ca6302;
 }
+
 .exercise-name {
     font-size: var(--font-size-large);
     font-weight: bold;
     margin-right: 5rem;
 }
 
-/*BUTTONS*/
 .button {
     border: none;
-    border-radius: 8px;
-    padding: 12px 15px;
+    border-radius: var(--padding-small);
+    padding: var(--padding-small) var(--padding-small);
     font-weight: bold;
-    font-size: 3rem;
+    font-size: var(--font-size-large);
     cursor: pointer;
     user-select: none;
 }
 
 .workoutButton {
-    background-color: #007bff;
-    color: #ffffff;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
     font-weight: bold;
-    padding: 15px;
+    padding: var(--padding-small);
     border: none;
-    border-radius: 8px;
-    margin: 10px 0;
+    border-radius: var(--padding-small);
+    margin: var(--margin-small) 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .deleteButton {
     position: absolute;
     top: 0;
     right: 0;
     opacity: 0.7;
 }
+
 .addButton {
     background-color: #28a745;
 }
 
 .record {
     border: 1px solid #000;
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 3rem;
+    margin: var(--margin-small) 0;
+    padding: var(--margin-small);
+    font-size: var(--font-size-large);
 }
+
 .record-header {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    padding: 5px 0;
+    padding: var(--padding-small) 0;
 }
+
 .record-title {
     font-weight: bold;
 }
+
 .record-notes {
     font-style: italic;
-    grid-column: 2 / 4; /* Make record-notes span two columns */
+    grid-column: 2 / 4;
 }
+
 .exercise-record {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    padding: 5px 0;
+    padding: var(--padding-small) 0;
 }
+
 .exercise-record:nth-child(even) {
-    background-color: #f0f0f0; /* Slightly different background color for every second record */
+    background-color: #f0f0f0;
 }
 
-.exercise-weight-record, .exercise-reps-record {
+.exercise-weight-record,
+.exercise-reps-record {
     text-align: right;
-    font-family: monospace; /* Makes the font monospace */
+    font-family: monospace;
 }
 
-/* Select dropdown box with the same style and size */
 .reuse-weights-selection {
+    display: inline-block;
     font-size: var(--font-size-large);
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #007bff;
-    margin: 10px 0;
+    padding: var(--padding-small);
+    border-radius: var(--padding-small);
+    border: 1px solid var(--button-bg-color);
+    margin: var(--margin-small) var(--margin-small) var(--margin-small) 0;
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.reuse-weights-label {
+    display: inline-block;
+    font-size: var(--font-size-large);
+    margin: var(--margin-small) var(--margin-small) var(--margin-small) 0;
+}
 
 span#workoutTitle {
     display: block;
     position: absolute;
-    top:0;
+    top: 0;
     left: 0;
     font-size: var(--font-size-large);
     font-weight: bold;
-    background-color: #007bff;
-    color: #ffffff;
-    padding: 15px 0px;
-    border-radius: 8px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    padding: var(--padding-small) 0px;
+    border-radius: var(--padding-small);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     text-align: center;
@@ -169,25 +170,32 @@ span#workoutTitle {
     cursor: no-drop;
 }
 
-.header-container {
+#customPromptForm {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #007bff;
-    color: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
+#customPromptForm > button {
+    font-size: var(--font-size-large);
+}
+
+.customInput {
+    max-width: 50%;
+    font-size: var(--font-size-large);
+    text-align: center;
+}
+
+.header-container,
 .total-weight-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #007bff;
-    color: #ffffff;
+    padding: var(--padding-small);
+    border-radius: var(--padding-small);
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -196,36 +204,90 @@ span#workoutTitle {
     overflow: hidden;
 }
 
+.weights-list:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
 .item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(150px, 3fr) 1fr 1fr 1fr;
     background-color: #f7f7f7;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    margin: 5px 0;
+    border-radius: var(--padding-small);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: var(--font-size-large);
+    font-size: 2.25rem;
     color: #333;
     user-select: none;
-    margin: 0 5px;
+    margin: 0 var(--margin-small);
+}
+
+.item-name,
+.item-quantity {
+    text-align: right;
+    font-family: monospace;
 }
 
 .item-name {
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-weight {
     color: #555;
 }
 
+.item-icon {
+    display: block;
+    margin: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 .item-quantity {
     color: #777;
     font-style: italic;
+    margin: 0 var(--margin-small);
+}
+
+.item-quantity-bar {
+    height: 70%;
+    background-color: #f7f7f7;
+    box-sizing: border-box;
+    border: 1px solid #777;
+}
+
+.item-quantity-bar-filled {
+    background-color: var(--button-bg-color);
 }
 
 .item:hover {
     background-color: #eef;
     border-color: #ccd;
+}
+
+.item-adjust-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-adjust-button {
+    line-height: 5rem;
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    padding: 0;
+    width: 50%;
+    background-color: var(--button-bg-color);
+    width: 50%;
+}
+
+.item-name,
+.item-quantity,
+.item-adjust-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
