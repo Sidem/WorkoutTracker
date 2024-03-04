@@ -3,17 +3,17 @@
     "short_name": "HomeGym Tracker",
     "icons": [
       {
-        "src": "/icons/favicon-180x180.png",
+        "src": "./icons/favicon-180x180.png",
         "sizes": "180x180",
         "type": "image/png"
       },
       {
-        "src": "/icons/favicon.png",
+        "src": "./icons/favicon.png",
         "sizes": "256x256",
         "type": "image/png"
       }
     ],
-    "start_url": "/",
+    "start_url": "./",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#000000"
