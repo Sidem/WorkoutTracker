@@ -14,7 +14,8 @@ let availableWeights = JSON.parse(localStorage.getItem('availableWeights')) || {
     w200:{weight:2,quantity:4,name:"Weight"},
     w125:{weight:1.25,quantity:4,name:"Weight"},
     w100:{weight:1,quantity:8,name:"Weight"},
-    r25:{weight:0.25,quantity:16,name:"Ring"}
+    r25:{weight:0.25,quantity:16,name:"Ring"},
+    kbh250:{weight:2.5,quantity:1,name:"KettlebellHandle"}
 };
 
 localStorage.setItem('availableWeights', JSON.stringify(availableWeights)); 
