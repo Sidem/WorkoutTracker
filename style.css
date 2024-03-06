@@ -99,11 +99,12 @@ body {
     margin: var(--margin-small) 0;
     padding: var(--margin-small);
     font-size: var(--font-size-large);
+    position: relative;
 }
 
 .record-header {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr 1fr;
     padding: var(--padding-small) 0;
 }
 

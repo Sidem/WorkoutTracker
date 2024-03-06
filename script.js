@@ -2,25 +2,24 @@ let workouts = JSON.parse(localStorage.getItem('workouts')) || {};
 let selectedWorkout = '';
 
 let availableWeights = JSON.parse(localStorage.getItem('availableWeights')) || {
-    b750:{weight:7.5,quantity:1,name:"Barbell"},
-    b1000:{weight:10,quantity:1,name:"Barbell"},
-    ezb650:{weight:6.5,quantity:1,name:"EZBar"},
-    d200:{weight:2,quantity:4,name:"Dumbbell"},
-    d250:{weight:2.5,quantity:2,name:"Dumbbell"},
-    w2000:{weight:20,quantity:6,name:"Weight"},
-    w1000:{weight:10,quantity:4,name:"Weight"},
-    w500:{weight:5,quantity:12,name:"Weight"},
-    w250:{weight:2.5,quantity:8,name:"Weight"},
-    w200:{weight:2,quantity:4,name:"Weight"},
-    w125:{weight:1.25,quantity:4,name:"Weight"},
-    w100:{weight:1,quantity:8,name:"Weight"},
-    r25:{weight:0.25,quantity:16,name:"Ring"},
-    kbh250:{weight:2.5,quantity:1,name:"KettlebellHandle"}
+    b750: { weight: 7.5, quantity: 1, name: "Barbell" },
+    b1000: { weight: 10, quantity: 1, name: "Barbell" },
+    ezb650: { weight: 6.5, quantity: 1, name: "EZBar" },
+    d200: { weight: 2, quantity: 4, name: "Dumbbell" },
+    d250: { weight: 2.5, quantity: 2, name: "Dumbbell" },
+    w2000: { weight: 20, quantity: 6, name: "Weight" },
+    w1000: { weight: 10, quantity: 4, name: "Weight" },
+    w500: { weight: 5, quantity: 12, name: "Weight" },
+    w250: { weight: 2.5, quantity: 8, name: "Weight" },
+    w200: { weight: 2, quantity: 4, name: "Weight" },
+    w125: { weight: 1.25, quantity: 4, name: "Weight" },
+    w100: { weight: 1, quantity: 8, name: "Weight" },
+    r25: { weight: 0.25, quantity: 16, name: "Ring" },
+    kbh250: { weight: 2.5, quantity: 1, name: "KettlebellHandle" }
 };
 
-localStorage.setItem('availableWeights', JSON.stringify(availableWeights)); 
+localStorage.setItem('availableWeights', JSON.stringify(availableWeights));
 
-let usedWeights = {};
 let availableWorkoutWeights = {};
 let workoutExercises = {};
 let selectedExercise = '';
@@ -42,6 +41,7 @@ function createWorkoutButton(workout, workoutsContainer) {
     button.classList.add('workoutButton');
     workoutsContainer.appendChild(button);
 }
+
 function createAddButton(id, onclick) {
     const existingButton = document.getElementById(id);
     if (existingButton) {
@@ -55,17 +55,19 @@ function createAddButton(id, onclick) {
     button.classList.add('button');
     return button;
 }
+
 function listWorkouts() {
     const workoutsContainer = document.getElementById('workouts');
     workoutsContainer.innerHTML = '';
     Object.keys(workouts).forEach(workout => { createWorkoutButton(workout, workoutsContainer); });
-    workoutsContainer.appendChild(createAddButton('addWorkout', () => {addWorkout();}));
+    workoutsContainer.appendChild(createAddButton('addWorkout', () => { addWorkout(); }));
 }
+
 function displayWorkout() {
     if (selectedWorkout != '') {
         document.getElementById('workoutTitle').innerText = workouts[selectedWorkout].name;
         displayExerciseButtons();
-        displayDeleteButton('workout_delete', document.getElementById('workout'), () => {deleteWorkout();});
+        displayDeleteButton('workout_delete', document.getElementById('workout'), () => { deleteWorkout(); });
         displayWeights();
         displayRecords();
         document.getElementById('workout').style.display = 'block';
@@ -106,7 +108,7 @@ function displayExerciseButtons() {
     for (let exercise in workoutExercises) {
         displayExerciseButton(exercise, exercisesList);
     }
-    exercisesList.appendChild(createAddButton('addExercise', () => {addExercise();}));
+    exercisesList.appendChild(createAddButton('addExercise', () => { addExercise(); }));
 }
 function selectWorkout(workout) {
     selectedWorkout = workout;
@@ -115,6 +117,7 @@ function selectWorkout(workout) {
     getRemainingAvailableWeights();
     displayWorkout();
 }
+
 function reload() {
     workouts = JSON.parse(localStorage.getItem('workouts'));
     availableWeights = JSON.parse(localStorage.getItem('availableWeights')) || {};
@@ -133,9 +136,11 @@ function calculateTotalWeight(weights) {
     }
     return totalUsedWeight;
 }
+
 function convertKgToLbs(kg) {
     return (kg * 2.20462).toFixed(1);
 }
+
 function getRemainingAvailableWeights() {
     let availableWorkoutWeights = JSON.parse(localStorage.getItem('availableWeights'));
     let totalUsedWeights = {};
@@ -162,14 +167,14 @@ function addCollapseHeader(container, collapseTarget, title) {
     const collapseExpandButton = document.createElement('span');
     collapseExpandButton.classList.add('collapse-expand-button');
     collapseExpandButton.textContent = weightsCollapsed ? '🔼' : '🔽';
-    if(weightsCollapsed) collapseTarget.classList.add('collapsed');
+    if (weightsCollapsed) collapseTarget.classList.add('collapsed');
     else collapseTarget.classList.remove('collapsed');
     const header = document.createElement('span');
     header.classList.add('header');
     header.textContent = title;
     const headerContainer = document.createElement('div');
     headerContainer.onclick = function () {
-        if(weightsCollapsed) {
+        if (weightsCollapsed) {
             collapseTarget.classList.remove('collapsed');
             collapseExpandButton.textContent = '🔽';
             weightsCollapsed = false;
@@ -179,7 +184,7 @@ function addCollapseHeader(container, collapseTarget, title) {
             weightsCollapsed = true;
         }
     };
-    headerContainer.classList.add('header-container'); 
+    headerContainer.classList.add('header-container');
     headerContainer.appendChild(header);
     headerContainer.appendChild(collapseExpandButton);
     container.appendChild(headerContainer);
@@ -203,11 +208,11 @@ function createWeightItem(weight) {
     //itemQuantity.textContent = selectedExercise ? `${usedInThisExercise}/${remainingAfterThisExercise}` : `${weight.used}/${weight.available}`;
     const usedItems = selectedExercise ? usedInThisExercise : weight.used;
     const availableItems = selectedExercise ? remainingAfterThisExercise : weight.available;
-    for(let i = 0; i < availableItems; i++) {
+    for (let i = 0; i < availableItems; i++) {
         const itemBar = document.createElement('div');
         itemBar.classList.add('item-quantity-bar');
-        if(i < usedItems) itemBar.classList.add('item-quantity-bar-filled');
-        itemBar.style.width = `${100/availableItems}%`;
+        if (i < usedItems) itemBar.classList.add('item-quantity-bar-filled');
+        itemBar.style.width = `${100 / availableItems}%`;
         itemQuantity.appendChild(itemBar);
     }
     itemQuantity.classList.add('item-quantity');
@@ -278,7 +283,7 @@ function addReuseWeightsSelection(container) {
         }
         reuseWeightsSelection.appendChild(option);
     }
-    
+
     reuseWeightsSelection.value = workouts[selectedWorkout].exercises[selectedExercise].reuses || 'none';
     container.appendChild(reuseWeightsSelection);
 }
@@ -295,7 +300,7 @@ function displayWeights() {
     weights.forEach(weight => { weightsList.appendChild(createWeightItem(weight, weights)); });
     weightsContainer.appendChild(weightsList);
     toggleWeightAdjust();
-    if(selectedExercise != '') addReuseWeightsSelection(weightsContainer);
+    if (selectedExercise != '') addReuseWeightsSelection(weightsContainer);
     addTotalWeightForExercise(weightsContainer);
 }
 
@@ -309,7 +314,7 @@ function addTotalWeightForExercise(container) {
     } else {
         totalWeight.textContent = selectedExercise ? `${calculateTotalWeight(workouts[selectedWorkout].exercises[selectedExercise].weights)}kg (${convertKgToLbs(calculateTotalWeight(workouts[selectedWorkout].exercises[selectedExercise].weights))}lbs)` : '';
     }
-    if(selectedExercise == '') totalWeight.textContent = 'Select exercise to see weight.';
+    if (selectedExercise == '') totalWeight.textContent = 'Select exercise to see weight.';
     totalWeightContainer.appendChild(totalWeight);
     container.appendChild(totalWeightContainer);
 }
@@ -370,7 +375,7 @@ function selectExercise(exercise) {
 }
 async function addExercise() {
     let exerciseName = await customPrompt('Enter Exercise Name', '');
-    if(exerciseName === null || exerciseName == '') return;
+    if (exerciseName === null || exerciseName == '') return;
     let exerciseId = exerciseName.toLowerCase().replace(/ /g, '');
     let newExercise = {
         name: exerciseName,
@@ -394,7 +399,7 @@ function deleteExercise(exerciseId, exercise) {
 }
 async function addWorkout() {
     let workoutName = await customPrompt('Enter the name of the workout', '');
-    if(workoutName === null || workoutName == '') return;
+    if (workoutName === null || workoutName == '') return;
     let newWorkout = {
         name: workoutName,
         exercises: {}
@@ -417,7 +422,7 @@ function deleteWorkout() {
     }
 }
 async function addRecord() {
-    let records = JSON.parse(localStorage.getItem('records')) || [];
+    let records = JSON.parse(localStorage.getItem('records')) || {};
     let workout = workouts[selectedWorkout];
     let workoutName = workout.name;
     let exerciseRecords = {};
@@ -441,16 +446,18 @@ async function addRecord() {
         exerciseRecords: exerciseRecords,
         notes: await customPrompt('Add any notes about the workout', '')
     };
-    records.push(recordEntry);
+    if (!records[workoutName]) {
+        records[workoutName] = [];
+    }
+    records[workoutName].unshift(recordEntry);
     localStorage.setItem('records', JSON.stringify(records));
     displayRecords();
 }
 
 function customPrompt(message, defaultValue = '', inputType = 'text') {
     return new Promise((resolve) => {
-        // Create and show the modal
         let inputId = 'customTextInput';
-        switch(inputType) {
+        switch (inputType) {
             case 'number':
                 inputId = 'customNumberInput';
                 break;
@@ -475,21 +482,19 @@ function customPrompt(message, defaultValue = '', inputType = 'text') {
         const form = document.getElementById('customPromptForm');
         const numberInput = document.getElementById(inputId);
         numberInput.focus();
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting in the traditional way
-            resolve(numberInput.value || defaultValue); // Resolve with default value if input is empty
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            resolve(numberInput.value || defaultValue);
             document.body.removeChild(promptModal);
         });
-
-        document.getElementById('cancelBtn').addEventListener('click', function() {
+        document.getElementById('cancelBtn').addEventListener('click', function () {
             resolve(null);
             document.body.removeChild(promptModal);
         });
     });
 }
 
-function displayRecord(record, recordsContainer) {
+function displayRecord(recordID, record, recordsContainer) {
     let recordContainer = document.createElement('div');
     recordContainer.classList.add('record');
     let recordHeader = document.createElement('div');
@@ -500,8 +505,11 @@ function displayRecord(record, recordsContainer) {
     let recordNotes = document.createElement('span');
     recordNotes.classList.add('record-notes');
     recordNotes.textContent = record.notes;
+
     recordHeader.appendChild(recordTitle);
     recordHeader.appendChild(recordNotes);
+    displayDeleteButton('record_delete_' + recordID, recordContainer, () => { deleteRecord(recordID); });
+
     recordContainer.appendChild(recordHeader);
     for (let exercise in record.exerciseRecords) {
         let exerciseContainer = document.createElement('div');
@@ -534,16 +542,17 @@ function displayRecords() {
     recordsList.classList.add('records-list');
     addCollapseHeader(recordsContainer, recordsList, 'Records');
     let records = JSON.parse(localStorage.getItem('records')) || [];
-    records = records.filter(record => record.name === workouts[selectedWorkout].name);
-    //reverse the records so the most recent is at the top
-    records.reverse();
-    if (records.length > 0) {
+
+    records = records[selectedWorkout];
+
+    if (records && records.length > 0) {
         records.forEach(record => {
-            displayRecord(record, recordsList);
+            let recordID = records.indexOf(record);
+            displayRecord(recordID, record, recordsList);
         });
     } else {
         recordsList.innerHTML = 'No records for this workout';
-    } 
+    }
     recordsContainer.appendChild(recordsList);
 }
 
@@ -561,10 +570,16 @@ function createAddRecordButton() {
     return button;
 }
 
-function deleteRecord() {
-    let records = JSON.parse(localStorage.getItem('records')) || [];
-    records = records.filter(record => record.name !== workouts[selectedWorkout].name);
-    localStorage.setItem('records', JSON.stringify(records));
-    displayRecords();
+function deleteRecord(recordID) {
+    if (confirm('Are you sure you want to delete this record?')) {
+        let records = JSON.parse(localStorage.getItem('records'));
+        let selectedRecords = records[selectedWorkout];
+        selectedRecords.splice(recordID, 1);
+        records[selectedWorkout] = selectedRecords;
+        localStorage.setItem('records', JSON.stringify(records));
+        displayRecords();
+    } else {
+        return;
+    }
 }
 
