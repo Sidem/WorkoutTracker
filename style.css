@@ -122,6 +122,9 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: var(--padding-small) 0;
+    /* vertically center elements in cells */
+    align-items: center;
+    
 }
 
 .exercise-record:nth-child(even) {

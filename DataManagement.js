@@ -179,7 +179,7 @@ async function addRecord() {
     }
     let recordEntry = {
         name: workoutName,
-        date: new Date().toLocaleDateString('de-DE'),
+        date: new Date(),
         exerciseRecords: exerciseRecords,
         notes: await customPrompt('Add any notes about the workout', '')
     };

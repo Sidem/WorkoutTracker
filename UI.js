@@ -283,6 +283,12 @@ function customPrompt(message, defaultValue = '', inputType = 'text') {
     });
 }
 
+function getWeek(date) {
+    let firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    let pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+}
+
 function displayRecord(recordID, record, recordsContainer) {
     let recordContainer = document.createElement('div');
     recordContainer.classList.add('record');
@@ -290,7 +296,7 @@ function displayRecord(recordID, record, recordsContainer) {
     recordHeader.classList.add('record-header');
     let recordTitle = document.createElement('span');
     recordTitle.classList.add('record-title');
-    recordTitle.textContent = record.date;
+    recordTitle.textContent = new Date(record.date).toLocaleDateString("en-GB");
     let recordNotes = document.createElement('span');
     recordNotes.classList.add('record-notes');
     recordNotes.textContent = record.notes;
@@ -308,7 +314,8 @@ function displayRecord(recordID, record, recordsContainer) {
         exerciseName.textContent = exercise;
         let exerciseWeight = document.createElement('span');
         exerciseWeight.classList.add('exercise-weight-record');
-        exerciseWeight.textContent = record.exerciseRecords[exercise].totalWeight + 'kg';
+        let totalWeight = record.exerciseRecords[exercise].totalWeight;
+        exerciseWeight.textContent = totalWeight + 'kg|' + convertKgToLbs(totalWeight) + 'lbs';
         let exerciseReps = document.createElement('span');
         exerciseReps.classList.add('exercise-reps-record');
         exerciseReps.textContent = record.exerciseRecords[exercise].reps + 'reps';
