@@ -9,6 +9,8 @@
     --margin-small: 0.5rem;
     --button-bg-color: #007bff;
     --button-text-color: #ffffff;
+    --contrast-background: #dddddd;
+    --text-color-light: #ffffff;
 }
 
 body {
@@ -23,7 +25,8 @@ body {
 }
 
 #exercises, 
-#weightsContainer {
+#weightsContainer,
+#records {
     margin: 1rem 0;
 }
 
@@ -95,48 +98,6 @@ body {
     background-color: #28a745;
 }
 
-.record {
-    border: 1px solid #000;
-    margin: var(--margin-small) 0;
-    padding: var(--margin-small);
-    font-size: var(--font-size-large);
-    position: relative;
-}
-
-.record-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: var(--padding-small) 0;
-}
-
-.record-title {
-    font-weight: bold;
-}
-
-.record-notes {
-    font-style: italic;
-    grid-column: 2 / 4;
-}
-
-.exercise-record {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: var(--padding-small) 0;
-    /* vertically center elements in cells */
-    align-items: center;
-    
-}
-
-.exercise-record:nth-child(even) {
-    background-color: #f0f0f0;
-}
-
-.exercise-weight-record,
-.exercise-reps-record {
-    text-align: right;
-    font-family: monospace;
-}
-
 .reuse-weights-selection {
     display: inline-block;
     font-size: var(--font-size-large);
@@ -187,7 +148,7 @@ span#workoutTitle {
 }
 
 .customInput {
-    max-width: 50%;
+    max-width: 70%;
     font-size: var(--font-size-large);
     text-align: center;
 }
@@ -200,8 +161,7 @@ span#workoutTitle {
     padding: var(--padding-small);
     border-radius: var(--padding-small);
     background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: var(--text-color-light);
 }
 
 .collapsed {
@@ -209,38 +169,16 @@ span#workoutTitle {
     overflow: hidden;
 }
 
-.weights-list:nth-child(even) {
-    background-color: #e0e0e0;
-}
-
 .item {
     display: grid;
-    grid-template-columns: minmax(150px, 3fr) 1fr 1fr 1fr;
-    background-color: #f7f7f7;
-    border: 1px solid #ddd;
+    box-sizing: border-box;
+    grid-template-columns: minmax(150px, 2fr) 1fr 1fr 1fr;
+    background-color: #fff;
+    border: 1px solid #000;
     border-radius: var(--padding-small);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 2.25rem;
-    color: #333;
+    font-size: var(--font-size-medium);
+    color: #000;
     user-select: none;
-    margin: 0 var(--margin-small);
-}
-
-.item-name,
-.item-quantity {
-    text-align: right;
-    font-family: monospace;
-}
-
-.item-name {
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.item-weight {
-    color: #555;
 }
 
 .item-icon {
@@ -251,42 +189,21 @@ span#workoutTitle {
     max-height: 100%;
 }
 
-.item-quantity {
-    color: #777;
-    font-style: italic;
-    margin: 0 var(--margin-small);
-}
-
 .item-quantity-bar {
-    height: 70%;
-    background-color: #f7f7f7;
+    height: 80%;
     box-sizing: border-box;
-    border: 1px solid #777;
+    background-color: #fff;
+    border: 1px solid #000;
 }
 
 .item-quantity-bar-filled {
     background-color: var(--button-bg-color);
 }
 
-.item:hover {
-    background-color: #eef;
-    border-color: #ccd;
-}
-
-.item-adjust-button-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .item-adjust-button {
     line-height: 5rem;
-    font-size: var(--font-size-large);
-    font-weight: bold;
-    padding: 0;
-    width: 50%;
+    padding: 0 0.25rem;
     background-color: var(--button-bg-color);
-    width: 50%;
 }
 
 .item-name,
@@ -295,4 +212,53 @@ span#workoutTitle {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.item:nth-child(even) {
+    background-color: var(--contrast-background);
+}
+
+
+/* record styling */
+.record {
+    border: 1px solid #000;
+    margin: var(--margin-small) 0;
+    padding: var(--margin-small);
+    font-size: var(--font-size-large);
+    position: relative;
+}
+
+.record-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: var(--padding-small) 0;
+}
+
+.record-title {
+    font-weight: bold;
+}
+
+.record-notes {
+    font-style: italic;
+    grid-column: 2 / 4;
+}
+
+.exercise-record {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: var(--padding-small) 0;
+    align-items: center;
+}
+
+.exercise-record:nth-child(even) {
+    background-color:  var(--contrast-background);;
+}
+
+.exercise-weight-record,
+.exercise-reps-record {
+    text-align: right;
+    font-family: monospace;
 }

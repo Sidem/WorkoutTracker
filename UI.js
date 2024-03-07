@@ -1,6 +1,19 @@
 let weightsCollapsed = true;
 let weightAdjustDisabled = true;
+let murica = false;
 
+function addMuricaSwitch(container) {
+    const muricaButton = document.createElement('img');
+    muricaButton.src = './icons/merica.png';
+    muricaButton.classList.add('murica-button');
+    muricaButton.onclick = () => {
+        murica = !murica;
+        if (murica) muricaButton.classList.add('muricaa');
+        else muricaButton.classList.remove('muricaa');
+        displayWeights();
+    };
+    container.appendChild(muricaButton);
+}
 
 function createWorkoutButton(workout, workoutsContainer) {
     const button = document.createElement('button');
@@ -115,6 +128,7 @@ function addCollapseHeader(container, collapseTarget, title) {
     headerContainer.appendChild(header);
     headerContainer.appendChild(collapseExpandButton);
     container.appendChild(headerContainer);
+    return headerContainer;
 }
 
 function createWeightItem(weight) {
@@ -126,7 +140,7 @@ function createWeightItem(weight) {
     itemContainer.appendChild(weightIcon);
 
     const itemName = document.createElement('span');
-    itemName.textContent = `${weight.weight.toFixed(2)}kg`; //${weight.name} 
+    itemName.textContent = murica ? `${convertKgToLbs(weight.weight)}lbs` : `${weight.weight.toFixed(2)}kg`; //${weight.name} 
     itemName.classList.add('item-name');
 
     const itemQuantity = document.createElement('div');
@@ -225,7 +239,8 @@ function displayWeights() {
     weightsContainer.appendChild(weightsList);
     toggleWeightAdjust();
     if (selectedExercise != '') addReuseWeightsSelection(weightsContainer);
-    addTotalWeightForExercise(weightsContainer);
+    let totalWeightContainer = addTotalWeightForExercise(weightsContainer);
+    addMuricaSwitch(totalWeightContainer);
 }
 
 function addTotalWeightForExercise(container) {
@@ -241,6 +256,7 @@ function addTotalWeightForExercise(container) {
     if (selectedExercise == '') totalWeight.textContent = 'Select exercise to see weight.';
     totalWeightContainer.appendChild(totalWeight);
     container.appendChild(totalWeightContainer);
+    return totalWeightContainer;
 }
 
 function customPrompt(message, defaultValue = '', inputType = 'text') {
