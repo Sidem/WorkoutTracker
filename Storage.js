@@ -1,7 +1,7 @@
 let workouts = getWorkouts();
 let availableWeights = getAvailableWeights();
 setAvailableWeights(availableWeights);
-const serverUrl	= 'http://192.168.0.88:6969';
+const serverUrl	= 'https://192.168.0.88:6969';
 
 function getDataType(dataType) {
     switch (dataType) {
