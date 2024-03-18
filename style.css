@@ -8,6 +8,7 @@
     --padding-small: 0.5rem;
     --margin-small: 0.5rem;
     --button-bg-color: #007bff;
+    --button-bg-color-dark: #747474;
     --button-text-color: #ffffff;
     --contrast-background: #dddddd;
     --text-color-light: #ffffff;
@@ -76,7 +77,30 @@ body {
     user-select: none;
 }
 
+.modalButton {
+    width: 50%;
+    padding: 0.5rem 0;
+    margin: 0.5rem 0;
+    color: var(--text-color-light);
+    background-color: var(--button-bg-color-dark);
+}
+
+#confirmBtn {
+    background-color: var(--button-bg-color);;
+}
+
 .workoutButton {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    font-weight: bold;
+    padding: var(--padding-small);
+    border: none;
+    border-radius: var(--padding-small);
+    margin: var(--margin-small) 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.changeUserButton {
     background-color: var(--button-bg-color);
     color: var(--button-text-color);
     font-weight: bold;
@@ -96,6 +120,29 @@ body {
 
 .addButton {
     background-color: #28a745;
+}
+
+.promptModal {
+    /*always fixed and centered in the screen*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #ffffff;
+    padding: 2rem 0;
+    border-radius: var(--padding-small);
+    border: 2px solid var(--button-bg-color);
+    width: 75%;
+}
+
+.promptModal > form > label {
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    margin: 0 var(--font-size-medium) var(--font-size-medium) var(--font-size-medium);
+}
+.promptModal > form > input {
+    margin: 0 0 var(--font-size-medium) 0;
 }
 
 .reuse-weights-selection {

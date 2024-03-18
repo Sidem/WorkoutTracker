@@ -1,9 +1,80 @@
 let workouts = getWorkouts();
 let availableWeights = getAvailableWeights();
 setAvailableWeights(availableWeights);
+const serverUrl	= 'http://192.168.0.88:6969';
+
+function getDataType(dataType) {
+    switch (dataType) {
+        case 'workouts':
+            return getWorkouts();
+        case 'records':
+            return getRecords();
+        case 'measurementRecords':
+            return getMeasurementRecords();
+        case 'availableWeights':
+            return getAvailableWeights();
+    }
+}
+
+async function logIntoHomeNetwork() {
+    
+    try {
+        const healthCheckResponse = await fetch(`${serverUrl}/health`);
+        if (!healthCheckResponse.ok) {
+            throw new Error('Server is not reachable');
+        }
+    } catch (error) {
+        console.error('Server is not reachable, aborting function:', error);
+        return;
+    }
+
+    if (!getUsername()) {
+        setUsername(customPrompt("Please enter your username:", "TestUser"));
+    }
+    const username = getUsername();
+    const dataTypes = ['workouts', 'records', 'measurementRecords', 'availableWeights'];
+    for (const dataType of dataTypes) {
+        const response = await fetch(`${serverUrl}?username=${username}&dataType=${dataType}`);
+        const data = await response.json();
+        if (Object.keys(data).length > 0) {
+            switch (dataType) {
+                case 'workouts':
+                    setWorkouts(data);
+                    break;
+                case 'records':
+                    setRecords(data);
+                    break;
+                case 'measurementRecords':
+                    setMeasurementRecords(data);
+                    break;
+                case 'availableWeights':
+                    setAvailableWeights(data);
+                    break;
+            }
+        } else {
+            await fetch(`${serverUrl}?username=${username}&dataType=${dataType}`, {
+                method: 'POST',
+                body: JSON.stringify(getDataType(dataType))
+            });
+        }
+    }
+    workouts = getWorkouts();
+}
+
+function setUsername(username) {
+    localStorage.setItem('username', username);
+}
+
+function getUsername() {
+    return localStorage.getItem('username');
+}
 
 function getRecords() {
     return JSON.parse(localStorage.getItem('records')) || {};
+}
+
+function getMeasurementRecords() {
+    return JSON.parse(localStorage.getItem('measurementRecords')) || {};
 }
 
 function getWorkouts() {
@@ -33,10 +104,20 @@ function setRecords(records) {
     localStorage.setItem('records', JSON.stringify(records));
 }
 
+function setMeasurementRecords(measurementRecords) {
+    localStorage.setItem('measurementRecords', JSON.stringify(measurementRecords));
+}
+
 function setWorkouts(workouts) {
     localStorage.setItem('workouts', JSON.stringify(workouts));
 }
 
 function setAvailableWeights(availableWeights) {
     localStorage.setItem('availableWeights', JSON.stringify(availableWeights));
+}
+
+function clearData() {
+    let username = getUsername();
+    localStorage.clear();
+    setUsername(username);
 }

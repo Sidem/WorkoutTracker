@@ -157,7 +157,7 @@ function deleteWorkout() {
     }
 }
 
-async function addRecord() {
+async function addWorkoutRecord() {
     let records = getRecords();
     let workout = workouts[selectedWorkout];
     let workoutName = workout.name;
@@ -189,6 +189,37 @@ async function addRecord() {
     records[workoutName].unshift(recordEntry);
     setRecords(records);
     displayRecords();
+}
+
+async function addMeasurementRecord() {
+    let measurementRecords = getMeasurementRecords();
+    let date = new Date();
+    let lastEntry = Object.keys(measurementRecords).sort().reverse()[0];
+    if (lastEntry) {
+        lastEntry = measurementRecords[lastEntry];
+    }
+    
+    let recordEntry = {
+        date: date,
+        weight: await customPrompt('Enter your weight in kg', lastEntry ? lastEntry.weight : 0, 'number'),
+        chest: await customPrompt('Enter your chest measurement', lastEntry ? lastEntry.chest : 0, 'number'),
+        waist: await customPrompt('Enter your waist measurement', lastEntry ? lastEntry.waist : 0, 'number'),
+        hips: await customPrompt('Enter your hip measurement', lastEntry ? lastEntry.hips : 0, 'number'),
+        bicep: await customPrompt('Enter your bicep measurement', lastEntry ? lastEntry.bicep : 0, 'number'),
+        thigh: await customPrompt('Enter your thigh measurement', lastEntry ? lastEntry.thigh : 0, 'number'),
+    };
+    measurementRecords[date] = recordEntry;
+    setMeasurementRecords(measurementRecords);
+}
+
+async function addRecord() {
+    if (await customPrompt('Do you want to enter a new record?', 0, 'confirm')) {
+        await addWorkoutRecord();
+    }
+    if (await customPrompt('Do you want to enter your current weight and measurements?', 0, 'confirm')) {
+        await addMeasurementRecord();
+    }
+
 }
 
 function deleteRecord(recordID) {

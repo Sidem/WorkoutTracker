@@ -39,6 +39,26 @@ function createAddButton(id, onclick) {
     return button;
 }
 
+function createChangeUserButton() {
+    const changeUserButton = document.getElementById('changeUser');
+    if (changeUserButton) {
+        changeUserButton.remove();
+    }
+    const button = document.createElement('button');
+    button.textContent = '👤';
+    button.onclick = async function () {
+        let username = await customPrompt('Enter your username:', getUsername());
+        if (username === null || username == '') return;
+        setUsername(username);
+        clearData();
+        location.reload();
+    };
+    button.id = 'changeUser';
+    button.classList.add('changeUserButton');
+    button.classList.add('button');
+    document.getElementById('workouts').appendChild(button);
+}
+
 function listWorkouts() {
     const workoutsContainer = document.getElementById('workouts');
     workoutsContainer.innerHTML = '';
@@ -56,8 +76,8 @@ function displayWorkout() {
         document.getElementById('workout').style.display = 'block';
     } else {
         clearCurrentWorkout();
-        //document.getElementById('workout').style.display = 'none';
     }
+    createChangeUserButton();
 }
 function displayDeleteButton(buttonId, container, onclick) {
     const deleteButton = document.getElementById(buttonId);
@@ -140,7 +160,7 @@ function createWeightItem(weight) {
     itemContainer.appendChild(weightIcon);
 
     const itemName = document.createElement('span');
-    itemName.textContent = murica ? `${convertKgToLbs(weight.weight)}lbs` : `${weight.weight.toFixed(2)}kg`; //${weight.name} 
+    itemName.textContent = murica ? `${convertKgToLbs(weight.weight)}lbs` : `${weight.weight.toFixed(2)}kg`;
     itemName.classList.add('item-name');
 
     const itemQuantity = document.createElement('div');
@@ -262,40 +282,58 @@ function addTotalWeightForExercise(container) {
 function customPrompt(message, defaultValue = '', inputType = 'text') {
     return new Promise((resolve) => {
         let inputId = 'customTextInput';
+        let isConfirm = false;
         switch (inputType) {
             case 'number':
                 inputId = 'customNumberInput';
+                break;
+            case 'confirm':
+                isConfirm = true;
                 break;
             default:
                 inputType = 'text';
         }
         const promptModal = document.createElement('div');
         promptModal.innerHTML = `
-            <div style="font-size: 2rem; position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; padding: 10px;">
-                <div style="background-color: white; padding: 20px; border-radius: 5px; width: 100%; max-width: 400px;">
-                    <form id="customPromptForm">
-                        <label for="${inputId}" style="display:block; margin-bottom: 10px;">${message}</label>
-                        <input type="${inputType}" id="${inputId}" class="customInput" placeholder="${defaultValue}" style="width: 100%; padding: 10px; margin-bottom: 10px;" />
-                        <button type="submit" style="width: 100%; padding: 10px; border: none; background-color: #007bff; color: white; border-radius: 5px;">OK</button>
-                        <button type="button" id="cancelBtn" style="width: 100%; padding: 10px; border: none; background-color: #ccc; color: white; border-radius: 5px; margin-top: 5px;">Cancel</button>
-                    </form>
-                </div>
+            <div class="promptModal">
+                <form id="customPromptForm">
+                    <label for="${inputId}">${message}</label>
+                    ${isConfirm ? `
+                        <button type="button" id="confirmBtn" class="button modalButton">YES</button>
+                        <button type="button" id="cancelBtn" class="button modalButton">NO</button>
+                    ` : `
+                        <input type="${inputType}" id="${inputId}" class="customInput" placeholder="${defaultValue}" />
+                        <button type="submit" id="confirmBtn" class="button modalButton">OK</button>
+                        <button type="button" id="cancelBtn" class="button modalButton">Cancel</button>
+                    `}
+                </form>
             </div>
         `;
         document.body.appendChild(promptModal);
 
-        const form = document.getElementById('customPromptForm');
-        const numberInput = document.getElementById(inputId);
-        numberInput.focus();
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            resolve(numberInput.value || defaultValue);
-            document.body.removeChild(promptModal);
-        });
-        document.getElementById('cancelBtn').addEventListener('click', function () {
-            resolve(null);
-            document.body.removeChild(promptModal);
-        });
+        if (isConfirm) {
+            document.getElementById('confirmBtn').addEventListener('click', function () {
+                resolve(true);
+                document.body.removeChild(promptModal);
+            });
+            document.getElementById('cancelBtn').addEventListener('click', function () {
+                resolve(false);
+                document.body.removeChild(promptModal);
+            });
+        } else {
+            const form = document.getElementById('customPromptForm');
+            const numberInput = document.getElementById(inputId);
+            numberInput.focus();
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                resolve(numberInput.value || defaultValue);
+                document.body.removeChild(promptModal);
+            });
+            document.getElementById('cancelBtn').addEventListener('click', function () {
+                resolve(null);
+                document.body.removeChild(promptModal);
+            });
+        }
     });
 }
 
