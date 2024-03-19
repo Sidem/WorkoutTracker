@@ -1,7 +1,11 @@
-let workouts = getWorkouts();
+let workouts = {};
+let changeHappened = [false, false, false, false];
 let availableWeights = getAvailableWeights();
 setAvailableWeights(availableWeights);
 const serverUrl	= 'https://192.168.0.88:6969';
+let connected = false;
+const dataTypes = ['workouts', 'records', 'measurementRecords', 'availableWeights'];
+setInterval(syncData, 1000);
 
 function getDataType(dataType) {
     switch (dataType) {
@@ -17,14 +21,18 @@ function getDataType(dataType) {
 }
 
 async function logIntoHomeNetwork() {
-    
+    changeHappened = [false, false, false, false];
     try {
         const healthCheckResponse = await fetch(`${serverUrl}/health`);
         if (!healthCheckResponse.ok) {
             throw new Error('Server is not reachable');
+        } else {
+            connected = true;
         }
     } catch (error) {
         console.error('Server is not reachable, aborting function:', error);
+        workouts = getWorkouts();
+        connected = false;
         return;
     }
 
@@ -32,25 +40,11 @@ async function logIntoHomeNetwork() {
         setUsername(customPrompt("Please enter your username:", "TestUser"));
     }
     const username = getUsername();
-    const dataTypes = ['workouts', 'records', 'measurementRecords', 'availableWeights'];
     for (const dataType of dataTypes) {
         const response = await fetch(`${serverUrl}?username=${username}&dataType=${dataType}`);
         const data = await response.json();
         if (Object.keys(data).length > 0) {
-            switch (dataType) {
-                case 'workouts':
-                    setWorkouts(data);
-                    break;
-                case 'records':
-                    setRecords(data);
-                    break;
-                case 'measurementRecords':
-                    setMeasurementRecords(data);
-                    break;
-                case 'availableWeights':
-                    setAvailableWeights(data);
-                    break;
-            }
+            localStorage.setItem(dataType, JSON.stringify(data));
         } else {
             await fetch(`${serverUrl}?username=${username}&dataType=${dataType}`, {
                 method: 'POST',
@@ -59,6 +53,22 @@ async function logIntoHomeNetwork() {
         }
     }
     workouts = getWorkouts();
+}
+
+function syncData() {
+    if (!connected) {
+        return;
+    }
+    const username = getUsername();
+    for (const dataType of dataTypes) {
+        if (changeHappened[dataTypes.indexOf(dataType)]) {
+            fetch(`${serverUrl}?username=${username}&dataType=${dataType}`, {
+                method: 'POST',
+                body: JSON.stringify(getDataType(dataType))
+            });
+            changeHappened[dataTypes.indexOf(dataType)] = false;
+        }
+    }
 }
 
 function setUsername(username) {
@@ -100,20 +110,25 @@ function getAvailableWeights() {
     };
 }
 
+
+function setWorkouts(workouts) {
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+    changeHappened[0] = true;
+}
+
 function setRecords(records) {
     localStorage.setItem('records', JSON.stringify(records));
+    changeHappened[1] = true;
 }
 
 function setMeasurementRecords(measurementRecords) {
     localStorage.setItem('measurementRecords', JSON.stringify(measurementRecords));
-}
-
-function setWorkouts(workouts) {
-    localStorage.setItem('workouts', JSON.stringify(workouts));
+    changeHappened[2] = true;
 }
 
 function setAvailableWeights(availableWeights) {
     localStorage.setItem('availableWeights', JSON.stringify(availableWeights));
+    changeHappened[3] = true;
 }
 
 function clearData() {
