@@ -37,7 +37,7 @@ async function logIntoHomeNetwork() {
     }
 
     if (!getUsername()) {
-        setUsername(customPrompt("Please enter your username:", "TestUser"));
+        setUsername(await customPrompt("Please enter your username:", "TestUser"));
     }
     const username = getUsername();
     for (const dataType of dataTypes) {
