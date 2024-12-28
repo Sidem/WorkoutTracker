@@ -123,7 +123,6 @@ body {
 }
 
 .promptModal {
-    /*always fixed and centered in the screen*/
     position: fixed;
     top: 50%;
     left: 50%;
@@ -269,7 +268,6 @@ span#workoutTitle {
 }
 
 
-/* record styling */
 .record {
     border: 1px solid #000;
     margin: var(--margin-small) 0;

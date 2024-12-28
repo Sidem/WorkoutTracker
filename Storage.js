@@ -2,7 +2,7 @@ let workouts = {};
 let changeHappened = [false, false, false, false];
 let availableWeights = getAvailableWeights();
 setAvailableWeights(availableWeights);
-const serverUrl	= 'https://192.168.0.88:6969';
+const serverUrl	= 'https://192.168.0.20:7070';
 let connected = false;
 const dataTypes = ['workouts', 'records', 'measurementRecords', 'availableWeights'];
 setInterval(syncData, 1000);
